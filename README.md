@@ -1,5 +1,11 @@
 # FREE WING mod version 2020/11
 
+Support PNG format image file using pngle library .  
+https://github.com/kikuchan/pngle  
+
+But It is not work correctry .
+<img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_pngle/pngle.jpg" alt="Support PNG format image file using pngle library ." title="Support PNG format image file using pngle library ." width="320" height="240">
+
 How to build HackBGRT.efi using Windows 10 WSL Debian
 * Windows_WSL_Debian_1st.txt
 * Windows_WSL_Debian_2nd.txt
