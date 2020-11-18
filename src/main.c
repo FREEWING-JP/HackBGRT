@@ -209,6 +209,134 @@ static ACPI_BGRT* HandleAcpiTables(enum HackBGRT_action action, ACPI_BGRT* bgrt)
 }
 
 /**
+ * Load a PNG image file
+ *
+ * @param root_dir The root directory for loading a PNG.
+ * @param path The PNG path within the root directory.
+ * @return The loaded BMP, or 0 if not available.
+ */
+#include "../my_efilib/my_efilib.h"
+#include "../pngle/pngle.h"
+
+BMP* png_img = 0;
+
+static void draw_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+{
+	// UNUSED(pngle);
+	// UNUSED(w);
+	// UNUSED(h);
+	if (!png_img) return;
+
+	// 3 = RGB 3byte
+	// 54 = 24bit BMP has 54byte header
+	// Padding for 4 byte alignment
+	// flip Y pos
+	const UINT32 iw = png_img->width;
+	const UINT32 ih = png_img->height;
+	UINT32 pos = ((iw * 3) + (iw & 3)) * (ih - y - 1) + (x * 3) + 54;
+	// B,G,R
+	((UINT8*)png_img)[pos]   = rgba[2];
+	((UINT8*)png_img)[++pos] = rgba[1];
+	((UINT8*)png_img)[++pos] = rgba[0];
+
+	if ((x % 32) || (y % 32) || (x > 256) || (y > 256))
+		return;
+
+	Debug(L"HackBGRT: draw_pixel() (%4d, %4d) #%02x%02x%02x.\n", x, y, rgba[0], rgba[1], rgba[2]);
+}
+
+static void init_screen(pngle_t *pngle, uint32_t w, uint32_t h)
+{
+	// UNUSED(pngle);
+
+	Debug(L"HackBGRT: init_screen() (%d x %d).\n", w, h);
+
+	// 3 = RGB 3byte
+	// 54 = 24bit BMP has 54byte header
+	// Padding for 4 byte alignment
+	// const int pad = (w & 3);
+	const UINT32 size = ((w * 3) + (w & 3)) * h + 54;
+	Debug(L"HackBGRT: init_screen() AllocatePool %ld.\n", size);
+	BS->AllocatePool(EfiBootServicesData, size, (void*)&png_img);
+	if (!png_img) return;
+
+	// BI_RGB 24bit
+	CopyMem(
+		png_img,
+		"\x42\x4d"
+		"\x00\x00\x00\x00"
+		"\x00\x00"
+		"\x00\x00"
+		"\x36\x00\x00\x00"
+		"\x28\x00\x00\x00"
+		"\x00\x00\x00\x00"
+		"\x00\x00\x00\x00"
+		"\x01\x00"
+		"\x18\x00"
+		"\x00\x00\x00\x00"
+		"\x00\x00\x00\x00"
+		"\x13\x0b\x00\x00"
+		"\x13\x0b\x00\x00"
+		"\x00\x00\x00\x00"
+		"\x00\x00\x00\x00",
+		54
+	);
+
+	// Intel x86 Only, Byte Order = Little Endian
+	png_img->file_size = size;
+	png_img->width  = w;
+	png_img->height = h;
+	png_img->biSizeImage = size - 54;
+}
+
+static BMP* LoadPNG(EFI_FILE_HANDLE root_dir, const CHAR16* path) {
+	BMP* data = 0;
+	Debug(L"HackBGRT: Loading PNG %s.\n", path);
+	UINTN size;
+	data = LoadFile(root_dir, path, &size);
+	if (!data) {
+		Print(L"HackBGRT: Failed to load PNG (%s)!\n", path);
+		BS->Stall(1000000);
+		return 0;
+	}
+
+	Debug(L"HackBGRT: pngle_new() %d.\n", size);
+	pngle_t *pngle = pngle_new();
+
+	pngle_set_init_callback(pngle, init_screen);
+	pngle_set_draw_callback(pngle, draw_pixel);
+
+	Debug(L"HackBGRT: pngle_feed().\n");
+	int len = (int)size;
+	int fed = pngle_feed(pngle, data, len);
+	Debug(L"HackBGRT: pngle_feed() finish %d.\n", fed);
+	FreePool(data);
+	if (fed < 0) {
+		return 0;
+	}
+
+	const UINT32 iw = png_img->width;
+	const UINT32 ih = png_img->height;
+	const UINT32 ws = ((iw * 3) + (iw & 3));
+	for (int y=0; y<ih; ++y) {
+		for (int x=0; x<iw; ++x) {
+			if ((x % 32) || (y % 32) || (x > 256) || (y > 256))
+				continue;
+
+			UINT32 pos = ws * (ih - y - 1) + (x * 3) + 54;
+			// B,G,R
+			UINT8 b = ((UINT8*)png_img)[pos];
+			UINT8 g = ((UINT8*)png_img)[++pos];
+			UINT8 r = ((UINT8*)png_img)[++pos];
+
+			Debug(L"HackBGRT: read_pixel() (%4d, %4d) #%02x%02x%02x.\n", x, y, r, g, b);
+		}
+	}
+
+	return png_img;
+}
+
+/**
  * Load a bitmap or generate a black one.
  *
  * @param root_dir The root directory for loading a BMP.
@@ -235,7 +363,15 @@ static BMP* LoadBMP(EFI_FILE_HANDLE root_dir, const CHAR16* path) {
 		return bmp;
 	}
 	Debug(L"HackBGRT: Loading %s.\n", path);
-	bmp = LoadFile(root_dir, path, 0);
+
+	UINTN len = StrLen(path);
+	CHAR16 last_char = path[len -1];
+	Debug(L"HackBGRT: Filename Len %d, Last char %c.\n", (int)len, last_char);
+	if (last_char == 'g' || last_char == 'G') {
+		bmp = LoadPNG(root_dir, path);
+	} else {
+		bmp = LoadFile(root_dir, path, 0);
+	}
 	if (!bmp) {
 		Print(L"HackBGRT: Failed to load BMP (%s)!\n", path);
 		BS->Stall(1000000);
