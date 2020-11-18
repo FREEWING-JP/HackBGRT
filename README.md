@@ -1,5 +1,15 @@
 # FREE WING mod version 2020/11
 
+Support PNG format image file using upng library .  
+https://github.com/elanthis/upng  
+
+These formats supported:  
+  UPNG_RGB8         24-bit RGB  
+  UPNG_RGBA8        32-bit RGBA  
+
+It works fine .
+<img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_upng/upng.jpg" alt="Support PNG format image file using upng library ." title="Support PNG format image file using upng library ." width="320" height="240">
+
 How to build HackBGRT.efi using Windows 10 WSL Debian
 * Windows_WSL_Debian_1st.txt
 * Windows_WSL_Debian_2nd.txt
