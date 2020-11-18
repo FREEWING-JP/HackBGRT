@@ -25,7 +25,7 @@
 #ifndef __PNGLE_H__
 #define __PNGLE_H__
 
-#include <stdint.h>
+// #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {

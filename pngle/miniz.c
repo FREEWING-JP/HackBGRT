@@ -159,7 +159,9 @@
 #ifndef MINIZ_HEADER_INCLUDED
 #define MINIZ_HEADER_INCLUDED
 
-#include <stdlib.h>
+// #include <stdlib.h>
+
+#include "../my_efilib/my_efilib.h"
 
 // Defines to completely disable specific portions of miniz.c:
 // If all macros here are defined the only functionality remaining will be CRC-32, adler-32, tinfl, and tdefl.
@@ -941,8 +943,8 @@ typedef unsigned char mz_validate_uint16[sizeof(mz_uint16)==2 ? 1 : -1];
 typedef unsigned char mz_validate_uint32[sizeof(mz_uint32)==4 ? 1 : -1];
 typedef unsigned char mz_validate_uint64[sizeof(mz_uint64)==8 ? 1 : -1];
 
-#include <string.h>
-#include <assert.h>
+// #include <string.h>
+// #include <assert.h>
 
 #define MZ_ASSERT(x) assert(x)
 
