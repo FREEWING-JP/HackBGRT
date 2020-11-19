@@ -3,7 +3,7 @@
 
 # Clone HackBGRT HackBGRT_MULTI
 cd
-git clone https://github.com/FREEWING-JP/HackBGRT/ -b test/add_picojpeg HackBGRT_MULTI
+git clone https://github.com/FREEWING-JP/HackBGRT/ -b feature/mod_multi HackBGRT_MULTI
 cd HackBGRT_MULTI
 
 # Download gnu-efi
