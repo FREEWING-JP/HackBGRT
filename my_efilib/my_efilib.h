@@ -49,7 +49,7 @@ int memcmp(const void *cs, const void *ct, size_t count);
 #define FILE void *
 #define fopen(fn, m) NULL
 #define fseek(f, n, s) NULL
-#define ftell(f) NULL
+#define ftell(f) -1
 #define rewind(f) NULL
 #define fclose(f) NULL
 #define fread(b, s, n, f) NULL
