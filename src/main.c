@@ -322,7 +322,7 @@ static void* decode_png(void* buffer, UINTN size)
 				UINT32 png_pos = (y * width + x) * depth;
 				for (d = 0; d < 3; ++d) {
 					// B,G,R
-					UINT8 c = upng_buffer[png_pos + (depth - d - 1)];
+					UINT8 c = upng_buffer[png_pos + (3 - d - 1)];
 					((UINT8*)bmp)[bmp_pos] = c;
 					++bmp_pos;
 				}
