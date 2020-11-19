@@ -1,16 +1,29 @@
 # FREE WING mod version 2020/11
 
-Support PNG format image file using upng library .  
+## HackBGRT_MULTI
+* Support PNG format image file  
+* Support JPEG format image file  
+(Ofcourse also Support BMP format (^_^) )  
+
+### Support PNG format image file using upng library .
 https://github.com/elanthis/upng  
 
 These formats supported:  
   UPNG_RGB8         24-bit RGB  
   UPNG_RGBA8        32-bit RGBA  
 
-It works fine .
-<img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_upng/upng.jpg" alt="Support PNG format image file using upng library ." title="Support PNG format image file using upng library ." width="320" height="240">
+<img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_upng/upng.jpg" alt="HackBGRT_MULTI Support PNG format image file using upng library ." title="HackBGRT_MULTI Support PNG format image file using upng library ." width="320" height="240">
 
-How to build HackBGRT.efi using Windows 10 WSL Debian
+### Support JPEG format image file using picojpeg library .
+https://github.com/richgel999/picojpeg  
+
+These formats supported:  
+ SOF0 Baseline format only(not Support Progressive)  
+<img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_picojpeg/HackBGRT_MULTI_1280px-Burosch_Blue-only_Test_pattern_mit_erklaerung.jpg" alt="HackBGRT_MULTI Support JPEG format image file using picojpeg library ." title="HackBGRT_MULTI Support JPEG format image file using picojpeg library ." width="320" height="240">  
+https://commons.wikimedia.org/wiki/File:Burosch_Blue-only_Test_pattern_mit_erklaerung.jpg  
+1,280 × 720 pixels
+
+## How to build HackBGRT.efi using Windows 10 WSL Debian
 * Windows_WSL_Debian_1st.txt
 * Windows_WSL_Debian_2nd.txt
 * Windows_WSL_Debian_3rd.txt
