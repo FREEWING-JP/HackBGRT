@@ -28,6 +28,7 @@ https://commons.wikimedia.org/wiki/File:Burosch_Blue-only_Test_pattern_mit_erkla
 * Windows_WSL_Debian_1st.txt
 * Windows_WSL_Debian_2nd.txt
 * Windows_WSL_Debian_3rd.txt
+* Install.txt
 
 Caution:  
 Build only the 64-bit version .  
