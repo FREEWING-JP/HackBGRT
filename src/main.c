@@ -390,7 +390,7 @@ static void* decode_png(void* buffer, UINTN size)
 					// or
 					// UINT16 maxval = 0xFFFF
 					// UINT8 c = (uint16_val * 255 + maxval / 2) / maxval
-					UINT8 c = upng_buffer[png_pos + (6 - (d*2) - 1)];
+					UINT8 c = upng_buffer[png_pos + (6 - (d*2) - 2)];
 					((UINT8*)bmp)[bmp_pos] = c;
 					++bmp_pos;
 				}
