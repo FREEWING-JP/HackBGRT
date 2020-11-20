@@ -10,7 +10,11 @@ https://github.com/elanthis/upng
 
 These formats supported:  
   UPNG_RGB8         24-bit RGB  
+  UPNG_RGB16        48-bit RGB  
   UPNG_RGBA8        32-bit RGBA  
+  UPNG_RGBA16       64-bit RGBA  
+  UPNG_LUMINANCE8   8-bit Greyscale  
+  UPNG_LUMINANCEA8  8-bit Greyscale w/ 8-bit Alpha  
 
 <img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_upng/upng.jpg" alt="HackBGRT_MULTI Support PNG format image file using upng library ." title="HackBGRT_MULTI Support PNG format image file using upng library ." width="320" height="240">
 
