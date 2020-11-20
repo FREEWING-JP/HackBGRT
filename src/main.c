@@ -354,6 +354,10 @@ static void* decode_png(void* buffer, UINTN size)
 	if (upng_get_format(upng) == UPNG_LUMINANCE8 || upng_get_format(upng) == UPNG_LUMINANCE_ALPHA8) {
 		// 8-bit Greyscale
 		decode_type = 3;
+	} else
+	if (upng_get_format(upng) == UPNG_INDEX8) {
+		// 8-bit Index Color
+		decode_type = 4;
 	}
 
 	if (!decode_type) {
@@ -363,6 +367,7 @@ static void* decode_png(void* buffer, UINTN size)
 	}
 
 	const unsigned char* upng_buffer = upng_get_buffer(upng);
+	const unsigned char* upng_pallet = upng_get_pallet(upng);
 	UINT32 bmp_width = ((width * 3) + (width & 3));
 	for (y = 0; y != height; ++y) {
 		for (x = 0; x != width; ++x) {
@@ -398,6 +403,16 @@ static void* decode_png(void* buffer, UINTN size)
 				((UINT8*)bmp)[bmp_pos]   = c;
 				((UINT8*)bmp)[++bmp_pos] = c;
 				((UINT8*)bmp)[++bmp_pos] = c;
+				++bmp_pos;
+			} else
+			if (decode_type == 4) {
+				// 8-bit Index Color
+				UINT8 c = upng_buffer[png_pos];
+
+				// B,G,R Pallet
+				((UINT8*)bmp)[bmp_pos]   = upng_pallet[c * 3 + 2];
+				((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3 + 1];
+				((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3];
 				++bmp_pos;
 			}
 
