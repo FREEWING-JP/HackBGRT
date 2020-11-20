@@ -334,7 +334,7 @@ static void* decode_png(void* buffer, UINTN size)
 				// B,G,R
 				UINT8 r = ((UINT8*)bmp)[--bmp_pos];
 				UINT8 g = ((UINT8*)bmp)[--bmp_pos];
-				UINT8 b = ((UINT8*)bmp)[bmp_pos];
+				UINT8 b = ((UINT8*)bmp)[--bmp_pos];
 				Debug(L"HackBGRT: bmp (%4d, %4d) #%02x%02x%02x.\n", x, y, r, g, b);
 			}
 		}
@@ -753,7 +753,7 @@ static void* decode_jpeg(void* buffer, UINTN size)
 			// B,G,R
 			UINT8 r = ((UINT8*)bmp)[--bmp_pos];
 			UINT8 g = ((UINT8*)bmp)[--bmp_pos];
-			UINT8 b = ((UINT8*)bmp)[bmp_pos];
+			UINT8 b = ((UINT8*)bmp)[--bmp_pos];
 			Debug(L"HackBGRT: bmp (%4d, %4d) #%02x%02x%02x.\n", x, y, r, g, b);
 		}
 	}
