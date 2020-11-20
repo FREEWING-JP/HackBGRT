@@ -42,6 +42,12 @@ Reference:
 UEFIアプリケーション開発環境を Windowsの WSL環境で構築して QEMU環境で動作確認する方法  
 http://www.neko.ne.jp/~freewing/software/uefi_bios_hack/  
 
+
+---
+## Can't Disable Secure Boot ?
+Super UEFIinSecureBoot Disk  
+https://github.com/ValdikSS/Super-UEFIinSecureBoot-Disk  
+
 ---
 # HackBGRT
 
