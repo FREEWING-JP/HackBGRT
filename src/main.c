@@ -209,6 +209,36 @@ static ACPI_BGRT* HandleAcpiTables(enum HackBGRT_action action, ACPI_BGRT* bgrt)
 }
 
 /**
+ * Plot Dot pixel
+ */
+static void plot_dot(const uint32_t x, const uint32_t y, const UINT8 r, const UINT8 g, const UINT8 b)
+{
+	EFI_GRAPHICS_OUTPUT_PROTOCOL* gop = GOP();
+	if (!gop) {
+		// Debug(L"GOP not found!\n");
+		return;
+	}
+
+	const uint32_t w = 1, h = 1;
+	const UINTN delta = w * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
+
+	EFI_GRAPHICS_OUTPUT_BLT_PIXEL pixel;
+	pixel.Blue  = b;
+	pixel.Green = g;
+	pixel.Red   = r;
+	pixel.Reserved = 0x00;
+
+	gop->Blt(gop,
+		&pixel,					// Dot data
+		EfiBltBufferToVideo,	// Draw dot
+		0, 0,					// UINTN SourceX, SourceY
+		x, y,					// UINTN DestinationX, DestinationY
+		w, h,					// UINTN Width, Height
+		delta					// UINTN Delta
+		);
+}
+
+/**
  * Load a PNG image file
  *
  * @param root_dir The root directory for loading a PNG.
@@ -369,6 +399,14 @@ static void* decode_png(void* buffer, UINTN size)
 				((UINT8*)bmp)[++bmp_pos] = c;
 				((UINT8*)bmp)[++bmp_pos] = c;
 				++bmp_pos;
+			}
+
+			// Debug Plot Dot pixel
+			if (config.debug && 0) {
+				UINT8 r = ((UINT8*)bmp)[bmp_pos - 1];
+				UINT8 g = ((UINT8*)bmp)[bmp_pos - 2];
+				UINT8 b = ((UINT8*)bmp)[bmp_pos - 3];
+				plot_dot(x, y, r, g, b);
 			}
 
 			// Debug
@@ -783,6 +821,14 @@ static void* decode_jpeg(void* buffer, UINTN size)
 				UINT8 c = (UINT8)(a[d] & 0xFF);
 				((UINT8*)bmp)[bmp_pos] = c;
 				++bmp_pos;
+			}
+
+			// Debug Plot Dot pixel
+			if (config.debug && 0) {
+				UINT8 r = ((UINT8*)bmp)[bmp_pos - 1];
+				UINT8 g = ((UINT8*)bmp)[bmp_pos - 2];
+				UINT8 b = ((UINT8*)bmp)[bmp_pos - 3];
+				plot_dot(x, y, r, g, b);
 			}
 
 			// Debug
