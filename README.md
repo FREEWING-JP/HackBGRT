@@ -9,9 +9,10 @@
 https://github.com/elanthis/upng  
 
 These formats supported:  
+  UPNG_INDEX8       8-bit 256 INDEX Color Palette  
   UPNG_RGB8         24-bit RGB  
-  UPNG_RGB16        48-bit RGB  
   UPNG_RGBA8        32-bit RGBA  
+  UPNG_RGB16        48-bit RGB  
   UPNG_RGBA16       64-bit RGBA  
   UPNG_LUMINANCE8   8-bit Greyscale  
   UPNG_LUMINANCEA8  8-bit Greyscale w/ 8-bit Alpha  
