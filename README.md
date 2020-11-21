@@ -43,6 +43,10 @@ Reference:
 UEFIアプリケーション開発環境を Windowsの WSL環境で構築して QEMU環境で動作確認する方法  
 http://www.neko.ne.jp/~freewing/software/uefi_bios_hack/  
 
+---
+## Convert Progressive JPEG to Baseline JPEG ?
+Converting Progressive JPEG Image file to Baseline JPEG Image file  
+https://github.com/FREEWING-JP/CheckAndConvertJpegFile  
 
 ---
 ## Can't Disable Secure Boot ?
