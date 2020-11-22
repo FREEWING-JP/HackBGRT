@@ -431,9 +431,44 @@ static void* decode_png(void* buffer, UINTN size)
 					++bmp_pos;
 				}
 			} else
-			if (decode_type == 3) {
-				// 8-bit Greyscale
-				c = upng_buffer[png_pos];
+			if (decode_type >= 3) {
+				if (decode_type == 3) {
+					// 8-bit
+					c = upng_buffer[png_pos];
+				} else
+				if (decode_type == 4) {
+					// 4-bit
+					shift = png_pos & 1;
+					png_pos >>= 1;
+					c = upng_buffer[png_pos] >> shift_4bit[shift];
+					c = (c & 0x0F);
+					if (!is_index_color) {
+						// B,G,R Grayscale 4bit
+						c = c * 0x11;
+					}
+				} else
+				if (decode_type == 5) {
+					// 2-bit
+					shift = png_pos & 3;
+					png_pos >>= 2;
+					c = upng_buffer[png_pos] >> shift_2bit[shift];
+					c = (c & 0x03);
+					if (!is_index_color) {
+						// B,G,R Grayscale 2bit
+						c = c * 0x55;
+					}
+				} else
+				if (decode_type == 6) {
+					// 1-bit
+					shift = png_pos & 7;
+					png_pos >>= 3;
+					c = upng_buffer[png_pos] >> shift_1bit[shift];
+					c = (c & 0x01);
+					if (!is_index_color) {
+						// B,G,R Grayscale B/W
+						c = c * 0xFF;
+					}
+				}
 
 				if (is_index_color) {
 					// B,G,R Pallet
@@ -447,68 +482,6 @@ static void* decode_png(void* buffer, UINTN size)
 					((UINT8*)bmp)[++bmp_pos] = c;
 				}
 				++bmp_pos;
-			} else
-			if (decode_type == 4) {
-				// 4-bit Greyscale
-				shift = png_pos & 1;
-				png_pos >>= 1;
-				c = upng_buffer[png_pos] >> shift_4bit[shift];
-				c = (c & 0x0F);
-
-				if (is_index_color) {
-					// B,G,R Pallet
-					((UINT8*)bmp)[bmp_pos]   = upng_pallet[c * 3 + 2];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3 + 1];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3];
-				} else {
-					// B,G,R Grayscale 8bit
-					c = c * 0x11;
-					((UINT8*)bmp)[bmp_pos]   = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-				}
-				++bmp_pos;
-			} else
-			if (decode_type == 5) {
-				// 2-bit Greyscale
-				shift = png_pos & 3;
-				png_pos >>= 2;
-				c = upng_buffer[png_pos] >> shift_2bit[shift];
-				c = (c & 0x03);
-
-				if (is_index_color) {
-					// B,G,R Pallet
-					((UINT8*)bmp)[bmp_pos]   = upng_pallet[c * 3 + 2];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3 + 1];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3];
-				} else {
-					// B,G,R Grayscale 8bit
-					c = c * 0x55;
-					((UINT8*)bmp)[bmp_pos]   = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-				}
-				++bmp_pos;
-			} else
-			if (decode_type == 6) {
-				// 1-bit Greyscale B/W
-				shift = png_pos & 7;
-				png_pos >>= 3;
-				c = upng_buffer[png_pos] >> shift_1bit[shift];
-				c = (c & 0x01);
-
-				if (is_index_color) {
-					// B,G,R Pallet
-					((UINT8*)bmp)[bmp_pos]   = upng_pallet[c * 3 + 2];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3 + 1];
-					((UINT8*)bmp)[++bmp_pos] = upng_pallet[c * 3];
-				} else {
-					// B,G,R Grayscale 8bit
-					c = c * 0xFF;
-					((UINT8*)bmp)[bmp_pos]   = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-					((UINT8*)bmp)[++bmp_pos] = c;
-				}
 			}
 
 			// Debug Plot Dot pixel
