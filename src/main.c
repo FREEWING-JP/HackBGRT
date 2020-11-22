@@ -366,6 +366,8 @@ static void* decode_png(void* buffer, UINTN size)
 		return 0;
 	}
 
+	UINT8 c = 0;
+
 	const unsigned char* upng_buffer = upng_get_buffer(upng);
 	const unsigned char* upng_pallet = upng_get_pallet(upng);
 	UINT32 bmp_width = ((width * 3) + (width & 3));
@@ -378,7 +380,7 @@ static void* decode_png(void* buffer, UINTN size)
 				// 8-bit RGB
 				for (d = 0; d < 3; ++d) {
 					// B,G,R
-					UINT8 c = upng_buffer[png_pos + (3 - d - 1)];
+					c = upng_buffer[png_pos + (3 - d - 1)];
 					((UINT8*)bmp)[bmp_pos] = c;
 					++bmp_pos;
 				}
@@ -390,14 +392,14 @@ static void* decode_png(void* buffer, UINTN size)
 					// or
 					// UINT16 maxval = 0xFFFF
 					// UINT8 c = (uint16_val * 255 + maxval / 2) / maxval
-					UINT8 c = upng_buffer[png_pos + (6 - (d*2) - 2)];
+					c = upng_buffer[png_pos + (6 - (d*2) - 2)];
 					((UINT8*)bmp)[bmp_pos] = c;
 					++bmp_pos;
 				}
 			} else
 			if (decode_type == 3) {
 				// 8-bit Greyscale
-				UINT8 c = upng_buffer[png_pos];
+				c = upng_buffer[png_pos];
 
 				// B,G,R Grayscale 8bit
 				((UINT8*)bmp)[bmp_pos]   = c;
@@ -407,7 +409,7 @@ static void* decode_png(void* buffer, UINTN size)
 			} else
 			if (decode_type == 4) {
 				// 8-bit Index Color
-				UINT8 c = upng_buffer[png_pos];
+				c = upng_buffer[png_pos];
 
 				// B,G,R Pallet
 				((UINT8*)bmp)[bmp_pos]   = upng_pallet[c * 3 + 2];
