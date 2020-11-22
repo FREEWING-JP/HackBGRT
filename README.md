@@ -2,21 +2,20 @@
 
 ## HackBGRT_MULTI
 * Support PNG format image file  
+  (But not Support Interlaced image)  
 * Support JPEG format image file  
-(Ofcourse also Support BMP format (^_^) )  
+  (But not Support Progressive image)  
+* Ofcourse also Support BMP format (^_^)  
 
 ### Support PNG format image file using upng library .
 https://github.com/elanthis/upng  
 
 These formats supported:  
-  UPNG_INDEX8       8-bit 256 INDEX Color Palette  
-  UPNG_RGB8         24-bit RGB  
-  UPNG_RGBA8        32-bit RGBA  
-  UPNG_RGB16        48-bit RGB  
-  UPNG_RGBA16       64-bit RGBA  
-  UPNG_LUMINANCE8   8-bit Greyscale  
-  UPNG_LUMINANCEA8  8-bit Greyscale w/ 8-bit Alpha  
-
+  8-bit RGB, RGBA  
+  16-bit RGB, RGBA  
+  1,2,4,8-bit RGB INDEX Color Palette  
+  1,2,4,8-bit Greyscale  
+  8-bit Greyscale w/ 8-bit Alpha  
 <img src="https://raw.githubusercontent.com/FREEWING-JP/HackBGRT/test/add_upng/upng.jpg" alt="HackBGRT_MULTI Support PNG format image file using upng library ." title="HackBGRT_MULTI Support PNG format image file using upng library ." width="320" height="240">
 
 ### Support JPEG format image file using picojpeg library .
